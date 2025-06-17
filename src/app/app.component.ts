@@ -14,6 +14,7 @@ export class AppComponent {
   recording = false;
   uploading = false;
   message = "";
+  medicalComplaint = "";
 
   constructor(
     private audioService: AudioRecorderService,
@@ -32,25 +33,6 @@ export class AppComponent {
     this.upload(blob);
   }
 
-  /*
-  upload(blob: Blob) {
-    this.uploading = true;
-    const formData = new FormData();
-    formData.append('file', blob, 'audio.wav');
-
-    this.http.post('http://localhost:8080/api/speech/transcribe', formData)
-      .subscribe({
-        next: (res) => {
-          this.uploading = false;
-          console.log('Upload success', res);
-        },
-        error: (err) => {
-          this.uploading = false;
-          console.error('Upload error', err);
-        }
-      });
-  }*/
-
   upload(blob: Blob) {
     this.uploading = true;
     const formData = new FormData();
@@ -60,6 +42,7 @@ export class AppComponent {
       .then(res => {
         this.uploading = false;
         this.message = res.message;
+        this.medicalComplaint = res.medicalComplaint;
       })
       .catch(err => {
         this.uploading = false;
