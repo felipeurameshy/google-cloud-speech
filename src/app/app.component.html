@@ -1,46 +1,9 @@
-
 <div class="col-12 md:col-12">
+  <button pButton type="button" (click)="navegar('/browser')"><i class="pi pi-graduation-cap"></i>Browser</button>
+  <button pButton type="button" (click)="navegar('/chunk')"><i class="pi pi-graduation-cap"></i>Chunk</button>
+  <button pButton type="button" (click)="navegar('/wav')"><i class="pi pi-graduation-cap"></i>Wav</button>
+</div>
 
-  <form #formulario="ngForm" autocomplete="off">
-
-    <p-fluid>
-
-      <div class="col-12 md:col-12">
-      
-        <div class="formgrid grid">
-        
-          <div class="field col-12 md:col-12">
-            <label for="message">Transcrição de áudio</label>
-            <textarea id="message" name="message" rows="5" cols="30" pTextarea [(ngModel)]="message"></textarea>
-          </div>
-
-          <div class="field col-12 md:col-12">
-            <label for="medicalComplaint">Resumo de queixas médicas</label>
-            <textarea id="medicalComplaint" name="medicalComplaint" rows="10" cols="30" pTextarea [(ngModel)]="medicalComplaint"></textarea>
-          </div>
-
-          <div class="field col-12 md:col-12">
-            <label for="solution">Possíveis soluções</label>
-            <textarea id="solution" name="solution" rows="20" cols="30" pTextarea [(ngModel)]="solution"></textarea>
-          </div>
-
-          <div class="field col-12 md:col-12">
-            <button pButton type="button" (click)="start()" [disabled]="recording" class="button-gravacao">🎙️ Iniciar Gravação</button>
-            <button pButton type="button" (click)="stop()" [disabled]="!recording" class="button-gravacao">🛑 Parar Gravação</button>
-          </div>
-
-        </div>
-
-        @if(uploading){
-          <div class="centralizar-spinner">
-            <span class="loader"></span>
-          </div>
-        }
-
-      </div>
-
-    </p-fluid>
-
-  </form>
-
+<div>
+  <router-outlet></router-outlet>
 </div>

@@ -4,11 +4,14 @@ import RecordRTC, { StereoAudioRecorder } from 'recordrtc';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class AudioRecorderService {
+export class AudioWavService {
 
     private stream: MediaStream | null = null;
     private recorder: RecordRTC | null = null;
     private audioBlob: Blob | null = null;
+
+    private mediaRecorder!: MediaRecorder;
+    private audioChunks: Blob[] = [];
 
 
     constructor(public http: HttpClient) {
@@ -50,5 +53,40 @@ export class AudioRecorderService {
                 return response;
             });
     }
+
+
+
+    async startRecordingChunk() {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        this.mediaRecorder = new MediaRecorder(stream, {
+        mimeType: 'audio/webm'
+        });
+
+        this.mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                this.sendChunk(event.data);
+            }
+        };
+
+        this.mediaRecorder.start(1000); // grava chunks de 1 segundo
+    }
+
+    stopRecordingChunk() {
+        if (this.mediaRecorder?.state !== 'inactive') {
+        this.mediaRecorder.stop();
+        }
+    }
+
+    private sendChunk(blob: Blob) {
+        const formData = new FormData();
+        const file = new File([blob], 'audio_chunk.webm', { type: 'audio/webm' });
+        formData.append('file', file);
+
+        this.http.post('http://localhost:8080/api/speech/transcribe/chunk', formData).subscribe({
+            next: () => console.log('Chunk enviado'),
+            error: (err) => console.error('Erro ao enviar chunk:', err)
+        });
+  }
 
 }
