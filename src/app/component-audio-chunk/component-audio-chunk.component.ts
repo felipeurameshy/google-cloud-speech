@@ -18,7 +18,7 @@ import { AudioChunkService } from '../audio-chunk.service';
 })
 export class ComponentAudioChunkComponent {
 
-recording = false;
+  recording = false;
   uploading = false;
   message = "";
   medicalComplaint = "";

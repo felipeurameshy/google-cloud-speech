@@ -4,21 +4,17 @@ import RecordRTC, { StereoAudioRecorder } from 'recordrtc';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class AudioWavService {
+export class AudioBrowserService {
 
     private stream: MediaStream | null = null;
     private recorder: RecordRTC | null = null;
     private audioBlob: Blob | null = null;
 
-    private mediaRecorder!: MediaRecorder;
-    private audioChunks: Blob[] = [];
-
-
     constructor(public http: HttpClient) {
     }
 
-    async startRecording(): Promise<void> {
-        this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+     async startRecording(): Promise<void> {
+        this.stream = await navigator.mediaDevices.getDisplayMedia({ audio: true });
         this.recorder = new RecordRTC(this.stream, {
             type: 'audio',
             mimeType: 'audio/wav',
@@ -38,10 +34,6 @@ export class AudioWavService {
                 resolve(this.audioBlob!);
             });
         });
-    }
-
-    getAudioBlob(): Blob | null {
-        return this.audioBlob;
     }
 
     upload(blob: Blob) {
